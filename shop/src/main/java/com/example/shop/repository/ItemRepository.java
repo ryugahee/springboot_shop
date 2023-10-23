@@ -4,11 +4,12 @@ import com.example.shop.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 
 // JpaRepository는 2개의 제네릭 타입 사용(엔티티 타입 클래스, 기본키 타입)
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredicateExecutor<Item>{
     /*
     * 쿼리 메소드
     * */
