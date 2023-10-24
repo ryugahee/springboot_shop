@@ -1,5 +1,6 @@
 package com.example.shop.config;
 
+import com.example.shop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,15 +16,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity  // 시큐리티 활성화
 public class SecurityConfig {
-/*    @Autowired
 
+    @Autowired
     MemberService memberService;
 
     @Bean
-
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.formLogin()
+/*        http.formLogin()
                 .loginPage("/members/login")
                 .defaultSuccessUrl("/")
                 .usernameParameter("email")
@@ -37,9 +37,8 @@ public class SecurityConfig {
                 .mvcMatchers("/css/**", "/js/**", "/img/**").permitAll()
                 .mvcMatchers("/", "/members/**", "/item/**", "/images/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated();
+                .anyRequest().authenticated();*/
 
-​
 
 //        http.exceptionHandling()
 //                .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
@@ -50,7 +49,6 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-
-    }*/
+    }
 
 }
