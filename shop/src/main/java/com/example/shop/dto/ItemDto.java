@@ -1,9 +1,12 @@
 package com.example.shop.dto;
 
 import com.example.shop.constant.ItemSellStatus;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-
+@Getter
+@Setter
 public class ItemDto {
     private Long id;
 
