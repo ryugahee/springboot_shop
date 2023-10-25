@@ -3,10 +3,12 @@ package com.example.shop.controller;
 import com.example.shop.dto.MemberFormDto;
 import com.example.shop.entity.Member;
 import com.example.shop.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,10 @@ public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
+    /*
+    * 회원가입
+    * */
+
     // 회원가입 페이지로 이동
     @GetMapping(value = "/new")
     public String memberForm(Model model) {
@@ -27,10 +33,23 @@ public class MemberController {
         return "member/memberForm";
     }
 
+    // 회원가입 성공시 main페이지, 실패시 회원가입 페이지로 이동
+    // 검사 결과를 bindingResult에 담아줌
     @PostMapping(value = "/new")
-    public String memberForm(MemberFormDto memberFormDto) {
-        Member member = Member.createMember(memberFormDto, passwordEncoder);
-        memberService.saveMember(member);
+    public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "member/memberForm";
+        }
+
+        try {
+            Member member = Member.createMember(memberFormDto, passwordEncoder);
+            memberService.saveMember(member);
+        } catch (IllegalStateException e) {
+            // 중복 가입 예외 발생시 메시지를 뷰로 전달
+            model.addAttribute("errorMessage", e.getMessage());
+            return "member/memberForm";
+        }
 
         return "redirect:/";
     }

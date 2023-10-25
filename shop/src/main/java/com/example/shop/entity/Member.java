@@ -38,8 +38,8 @@ public class Member {
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
         Member member = new Member();
         member.setName(memberFormDto.getName());
-        member.setEmail(member.getEmail());
-        member.setAddress(member.getAddress());
+        member.setEmail(memberFormDto.getEmail());
+        member.setAddress(memberFormDto.getAddress());
 
         // Bean을 파라미터로 넘겨 비밀번호를 암호화
         String password = passwordEncoder.encode(memberFormDto.getPassword());
