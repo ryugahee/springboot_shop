@@ -21,12 +21,12 @@ public class OrderItem {
     @Column(name="order_item_id")
     private Long id;
 
-    @ManyToOne
-    @Column(name="item_id")
+    @ManyToOne(fetch = FetchType.LAZY)  // 지연 로딩 추가
+    @JoinColumn(name="item_id")
     private  Item item;
 
-    @ManyToOne
-    @Column(name="order_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="order_id")
     private Order order;
 
     private  int OrderPrice;  //주문 가격

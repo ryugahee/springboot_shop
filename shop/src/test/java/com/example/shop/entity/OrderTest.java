@@ -2,6 +2,7 @@ package com.example.shop.entity;
 
 import com.example.shop.constant.ItemSellStatus;
 import com.example.shop.repository.ItemRepository;
+import com.example.shop.repository.MemberRepository;
 import com.example.shop.repository.OrderRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -69,6 +70,58 @@ class OrderTest {
                 .orElseThrow(EntityNotFoundException::new);
         assertEquals(3, saveOrder.getOrderItems().size());
 
+    }
+
+    /*
+     * 고아 객체 제거 테스트
+     * 주문 엔티티(부모)에서 주문 상품(자식) 삭제시 orderItem 엔티티 삭제되는지 확인 
+     * */
+    
+    @Autowired
+    MemberRepository memberRepository;
+    // 주문 데이터 생성
+    public Order createOrder() {
+        Order order = new Order();
+
+        for (int i = 0; i <3; i++) {
+            Item item = this.createItem();
+            itemRepository.save(item);
+            OrderItem orderItem = new OrderItem();
+            orderItem.setItem(item);
+            orderItem.setCount(10);
+            orderItem.setOrderPrice(1000);
+            orderItem.setOrder(order);
+            order.getOrderItems().add(orderItem);
+        }
+
+        Member member = new Member();
+        memberRepository.save(member);
+
+        order.setMember(member);
+        orderRepository.save(order);
+        return order;
+    }
+
+    @Test
+    @DisplayName("고아 객체 제거 테스트")
+    public void orphanRemovalTest() {
+        Order order = this.createOrder();
+        order.getOrderItems().remove(0);  //order 엔티티에서 관리하고 있는 orderItem 리스트의 0번째 인덱스 요소를 삭제
+        em.flush();
+    }
+
+    /*
+     * 지연 로딩 테스트
+     * 주문 엔티티(부모)에서 주문 상품(자식) 삭제시 orderItem 엔티티 삭제되는지 확인
+     * */
+
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    public void lazyLoadingTest() {
+        Order order = this.createOrder();
+        Long orderItemId = order.getOrderItems().get(0).getId();
+        em.flush();
+        em.clear();
     }
 
 }
