@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "member")
+    @Column(name = "member_id")
     private Long id;
 
     private String name;

@@ -27,5 +27,5 @@ public class CartItem {
     @JoinColumn(name="item_id")
     private  Item item;
 
-    private int count;
+    private int count;  //상품 카운트
 }
