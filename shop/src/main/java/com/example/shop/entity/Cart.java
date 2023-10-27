@@ -21,7 +21,7 @@ public class Cart {
     @Column(name="cart_id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")  //매핑할 외래키 지정. name=매핑할 외래키 이름
     private Member member;
 
