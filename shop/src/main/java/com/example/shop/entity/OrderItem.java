@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class OrderItem {
+public class OrderItem extends BaseEntity{
 
     /*
      * 다대일 단방향 매핑 (아이템-주문)
@@ -33,7 +33,4 @@ public class OrderItem {
 
     private int Count;  // 수량
 
-    private LocalDateTime regTime;
-
-    private LocalDateTime updateTime;
 }
