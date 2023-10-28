@@ -1,5 +1,5 @@
 # springboot_shop
--쇼핑몰
+-의류 쇼핑몰
 
 
 
