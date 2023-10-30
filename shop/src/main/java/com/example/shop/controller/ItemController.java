@@ -2,6 +2,7 @@ package com.example.shop.controller;
 
 import com.example.shop.dto.ItemFormDto;
 import com.example.shop.service.ItemService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,5 +52,23 @@ public class ItemController {
         }
         // 정상 등록시 메인 페이지로 이동
         return "redirect:/";
+    }
+
+    /*
+     * 상품 수정
+     * */
+
+    @GetMapping(value = "/admin/item/{itemId}")
+    public String itemDtl(@PathVariable("itemId") Long itemId, Model model) {
+        try {
+            // 조회한 상품 데이터 모델에 모아 보내기
+            ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+            model.addAttribute("itemFormDto", itemFormDto);
+        } catch (EntityNotFoundException e) {  //상품엔티티가 존재하지 않는 경우
+            model.addAttribute("errorMessage", "존재하지 않은 상품입니다.");
+            model.addAttribute("itemFormDto", new ItemFormDto());
+            return "item/itemForm";
+        }
+        return "item/itemForm";
     }
 }

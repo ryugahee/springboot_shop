@@ -3,6 +3,7 @@ package com.example.shop.service;
 import com.example.shop.entity.ItemImg;
 import com.example.shop.repository.ItemImgRepository;
 import io.micrometer.common.util.StringUtils;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,33 @@ public class ItemImgService {
         // 실제 저장된 파일 이름, 업로드했던 파일 원래 이름, 업로드 결과 로컬에 저장된 파일 불러오는 경로
         itemImg.updateItemImg(oriImgName, imgName, imgUrl);
         itemImgRepository.save(itemImg);
+    }
+
+    /*
+     * 상품 수정
+     * */
+
+    public void updateItemImg(Long itemImgId, MultipartFile itemImgFile) throws Exception {
+        if (!itemImgFile.isEmpty()) {
+            // 기존 이미지 엔티티 조회
+            ItemImg savedItemImg = itemImgRepository.findById(itemImgId)
+                    .orElseThrow(EntityNotFoundException::new);
+
+            //기존 이미지 파일 삭제
+            if (!StringUtils.isEmpty(savedItemImg.getImgName())) {
+                fileService.deleteFile(itemImgLocation+"/"+
+                        savedItemImg.getImgName());
+            }
+
+            String oriImgName = itemImgFile.getOriginalFilename();
+            // 업데이트한 상품 이미지 파일을 업로드
+            String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
+            String imgUrl = "/images/item/" + imgName;
+            // 변경된 상품 이미지 정보를 세팅 **savedItemImg 엔티티가 영속상태이므로 데이터 변경만으로 변경 감지 기능이 도착하여
+            //트랜젝션이 끝날 때 update 쿼리가 실행됨
+            savedItemImg.updateItemImg(oriImgName, imgName, imgUrl);
+
+        }
+
     }
 }
