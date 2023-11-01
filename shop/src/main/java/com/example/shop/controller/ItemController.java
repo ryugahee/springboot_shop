@@ -58,6 +58,7 @@ public class ItemController {
      * 상품 수정
      * */
 
+    // 조회한 상품 데이터를 모델에 담아서 뷰로 전달
     @GetMapping(value = "/admin/item/{itemId}")
     public String itemDtl(@PathVariable("itemId") Long itemId, Model model) {
         try {

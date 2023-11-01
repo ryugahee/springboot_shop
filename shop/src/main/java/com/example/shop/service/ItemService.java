@@ -56,6 +56,7 @@ public class ItemService {
      * 상품 수정
      * */
 
+    // 상품 데이터 읽기
     @Transactional(readOnly = true)  //JPA가 더티체킹(변경감지) 안해서 성능 좋아짐
     public ItemFormDto getItemDtl(Long itemId) {
         // 이미지 가져오기 등록순. 오름차순
